@@ -20,7 +20,9 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+  // Add antiChrono callback function to sort data from earliest to latest
+  const antiChrono = (a, b) => ((a.date < b.date) ? 1 : -1)
+  return (data && data.length) ? data.sort(antiChrono).map(bill => row(bill)).join("") : ""
 }
 
 export default ({ data: bills, loading, error }) => {
