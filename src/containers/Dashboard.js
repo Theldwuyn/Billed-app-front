@@ -86,6 +86,7 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
+    console.log(e.target.parentElement)
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
@@ -134,20 +135,35 @@ export default class {
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
     if (this.counter % 2 === 0) {
+      const billsToDisplay = filteredBills(bills, getStatus(this.index))
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
-      $(`#status-bills-container${this.index}`)
-        .html(cards(filteredBills(bills, getStatus(this.index))))
+
+      // $(`#status-bills-container${this.index}`)
+      //   .html(cards(filteredBills(bills, getStatus(this.index))))
+
+      $(`#status-bills-container${this.index}`).html(cards(billsToDisplay))
+      /*
+      We bind the click event to the bills cards displayed when we open the dropdown menu
+      This way, we prevent event to be bind several times on each bills' card
+      */
+      billsToDisplay.forEach(bill => {
+        $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      })
       this.counter ++
     } else {
+      /*
+      No need to unbind event as we just empty the container's html, 
+      the cards then no longer exist, nor the event
+      */
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
       this.counter ++
     }
 
-    bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-    })
+    // bills.forEach(bill => {
+    //   $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+    // })
 
     return bills
 

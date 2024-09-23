@@ -42,7 +42,7 @@ export default class Login {
     const user = {
       type: "Admin",
       // input for email and password weren't selected correctly, data-testid was wrong
-      // we were selecting the employee form's input
+      // we were selecting the employee form input
       email: e.target.querySelector(`input[data-testid="admin-email-input"]`).value,
       password: e.target.querySelector(`input[data-testid="admin-password-input"]`).value,
       status: "connected"
