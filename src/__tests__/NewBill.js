@@ -7,6 +7,7 @@ import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 import userEvent from "@testing-library/user-event"
 import { localStorageMock } from "../__mocks__/localStorage.js"
+import { ROUTES } from "../constants/routes"
 
 
 describe("Given I am connected as an employee", () => {
@@ -32,6 +33,12 @@ describe("Given I am connected as an employee", () => {
       userEvent.upload(inputFile, file)
       expect(inputFile.value).toBe("")
       expect(window.alert).toHaveBeenCalledWith("Format du fichier invalide, veuillez sélectionner un fichier au format jpg, jpeg ou png")
+    })
+  })
+
+  describe("When I am on NewBill Page and I click the Envoyer button with a valid form", () => {
+    test("Then I am sent to Bills page", () => {
+      
     })
   })
 })
