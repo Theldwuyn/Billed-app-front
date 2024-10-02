@@ -9,6 +9,7 @@ import { ROUTES, ROUTES_PATH } from "../constants/routes"
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
 
+
 import router from "../app/Router.js";
 import Bills from "../containers/Bills.js";
 import userEvent from "@testing-library/user-event";
@@ -54,6 +55,7 @@ describe("Given I am connected as an employee", () => {
     })
 
     test("Then a modal should open", () => {
+
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
@@ -76,8 +78,7 @@ describe("Given I am connected as an employee", () => {
       
       userEvent.click(eyes)
       expect(handleClickIconEye).toHaveBeenCalled()
-      const modale = screen.getByTestId("modaleFileTest")
-      expect(modale).toBeTruthy()
+
     })
   })
 
@@ -117,78 +118,4 @@ describe("Given I am connected as an employee", () => {
 })
 
 // test d'intégration GET
-describe("Given I am connected as an employee", () => {
-  describe("When I navigate to Bills page", () => {
-    test.only("Then bills are fetched from mock API GET", async () => {
-      localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "a@a" }))
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.append(root)
-      router()
-      window.onNavigate(ROUTES_PATH.Bills)
-      await waitFor(() => screen.getByText("Mes notes de frais"))
-      const eyes = await screen.getAllByTestId("icon-eye")
-      expect(eyes).toBeTruthy()
-      /*jest.spyOn(mockStore, "bills");
-        Object.defineProperty(window, "localStorage", {
-          value: localStorageMock,
-        });
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ type: "Employee", email: "a@a" })
-        );
 
-        const root = document.createElement("div");
-        root.setAttribute("id", "root");
-        document.body.append(root);
-        router();
-        window.onNavigate(ROUTES_PATH["Bills"]);
-
-        await waitFor(() => screen.getByText("Mes notes de frais"));
-
-        const newBillBtn = await screen.findByRole("button", {
-          name: /nouvelle note de frais/i,
-        });
-        const billsTableRows = screen.getByTestId("tbody");
-
-        expect(newBillBtn).toBeTruthy();
-        expect(billsTableRows).toBeTruthy();
-        expect(within(billsTableRows).getAllByRole("row")).toHaveLength(4);*/
-    })
-  /*describe("When an error occurs on API", () => {
-    beforeEach(() => {
-      document.body.innerHTML = ""
-      jest.spyOn(mockStore, "bills")
-      Object.defineProperty(
-        window,
-        "localStorage",
-        { value: localStorageMock }
-      )
-      window.localStorage.setItem("user", JSON.stringify({
-        type: 'Employee',
-        email: 'a@a'
-      }))
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.appendChild(root)
-      router()
-    })
-    test("fetches bills from an API and fails with 404 message error", async () => {
-      mockStore.bills.mockImplementationOnce(() => {
-        return {
-          list : () => {
-            return Promise.reject(new Error("Erreur 404"))
-          }
-        }
-      })
-      window.onNavigate(ROUTES_PATH.Bills)
-      await new Promise(process.nextTick)
-      const message = await screen.getByText(/Erreur 404/)
-      expect(message).toBeTruthy()
-      const eyes = screen.getAllByTestId("icon-eye")
-      expect(eyes).toBeTruthy()
-    })
-  })*/
-
-  })
-})

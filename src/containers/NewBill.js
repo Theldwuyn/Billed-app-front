@@ -20,8 +20,9 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
-    const fileType = fileName.split(".")[1]
-    const acceptedType = ["jpg", "jpeg", "png"]
+    const fileType = file.type
+    console.log(fileType)
+    const acceptedType = ['image/jpeg', 'image/png']
     if(acceptedType.includes(fileType)) {
       const formData = new FormData()
       const email = JSON.parse(localStorage.getItem("user")).email
