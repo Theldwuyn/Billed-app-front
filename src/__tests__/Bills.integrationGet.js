@@ -3,16 +3,20 @@
  */
 
 import { localStorageMock } from "../__mocks__/localStorage";
+import { screen, within } from "@testing-library/dom"
 import mockStore from "../__mocks__/store.js";
 import router from "../app/Router.js";
-import { ROUTES_PATH, ROUTES } from "../constants/routes.js";
-import {screen} from "@testing-library/dom"
-import Bills from "../containers/Bills.js";
+import { ROUTES_PATH } from "../constants/routes.js";
 import "@testing-library/jest-dom"
 
 // Test d'intégration GET
 
+// mock of '../app/Store.js' to replace the import of Store in Router.js
+// by mockStore
 jest.mock('../app/Store.js', () => mockStore)
+
+// The line "await new Promise(process.nextTick)" is necessary to get through
+// the loading page
 
 describe("Given I am connected as an employee", () => {
     describe("When I navigate to Bills page", () => {
@@ -22,19 +26,15 @@ describe("Given I am connected as an employee", () => {
                 type: "Employee",
                 email: "a@a"
             }))
+            const root = document.createElement("div")
+            root.setAttribute("id", "root")
+            document.body.appendChild(root)
+            router()
+            window.onNavigate(ROUTES_PATH['Bills'])
+            await new Promise(process.nextTick)
 
-            const onNavigate = (pathname) => {
-                document.body.innerHTML = ROUTES({ pathname })
-            }
-
-            const billsInstance = new Bills({
-                document, onNavigate, store: mockStore, localStorage: window.localStorage
-            })
-
-            const data = await billsInstance.getBills()
-            const mockedData = await mockStore.bills().list()
-
-            expect(data.length).toBe(mockedData.length)
+            const billsTable = screen.getByTestId("tbody")
+            expect(within(billsTable).getAllByRole("row")).toHaveLength(4)
         })
         describe("When an error occurs on API", () => {
             beforeEach(() => {
@@ -63,7 +63,7 @@ describe("Given I am connected as an employee", () => {
                 })
                 window.onNavigate(ROUTES_PATH['Bills'])
                 await new Promise(process.nextTick)
-                const message = await screen.getByText(/Erreur 404/)
+                const message = screen.getByText(/Erreur 404/)
                 expect(message).toBeTruthy()
             })
             test("fetches bills fails with error 500", async () => {
@@ -76,7 +76,7 @@ describe("Given I am connected as an employee", () => {
                 })
                 window.onNavigate(ROUTES_PATH['Bills'])
                 await new Promise(process.nextTick)
-                const message = await screen.getByText(/Erreur 500/)
+                const message = screen.getByText(/Erreur 500/)
                 expect(message).toBeTruthy()
             })
         })
