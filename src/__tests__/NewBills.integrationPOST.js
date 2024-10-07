@@ -62,6 +62,9 @@ describe("Given I am connected as an employee", () => {
 
             expect(spyUpdate).toHaveBeenCalled
             expect(spyCreate).toHaveBeenCalled
+
+            const pageTitle = screen.getByText("Mes notes de frais")
+            expect(pageTitle).toBeTruthy()
         })
     })
 })

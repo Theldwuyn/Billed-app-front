@@ -52,48 +52,4 @@ describe("Given I am connected as an employee", () => {
       expect(inputFile.files[0]).toStrictEqual(file)
     })
   })
-
-  describe("When I am on NewBill Page and I click the Envoyer button with a valid form", () => {
-    test("Then I am sent to Bills page", () => {
-      const html = NewBillUI()
-      document.body.innerHTML = html
-
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname })
-      }
-
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
-      }))
-
-      const newBill = new NewBill({document, onNavigate, store: mockedStore, localStorage: window.localStorage})
-
-      // only required input
-      const expenseTypeInput = screen.getByTestId("expense-type")
-      const datePickerInput = screen.getByTestId("datepicker")
-      const amountInput = screen.getByTestId("amount")
-      const pctInput = screen.getByTestId("pct")
-      const fileInput = screen.getByTestId("file")
-
-      fireEvent.change(expenseTypeInput, {target: {value: 'Transports'}})
-      fireEvent.change(datePickerInput, {target: {value: '2001-01-01'}})
-      fireEvent.change(amountInput, {target: {value: 200}})
-      fireEvent.change(pctInput, {target: {value: 20}})
-
-      // uploading an accepted file (jpg, jpeg or png)
-      const file = new File(["foo"], "foo.jpg", {type: 'image/jpeg'})
-      userEvent.upload(fileInput, file)
-
-      const submitFormBtn = screen.getByText("Envoyer")
-      
-      const handleSubmit = jest.fn((e) => newBill.handleSubmit)
-      submitFormBtn.addEventListener('click', handleSubmit)
-      userEvent.click(submitFormBtn)
-      const pageTitle = screen.getByText("Mes notes de frais")
-
-      expect(handleSubmit).toHaveBeenCalled()
-      expect(pageTitle).toBeTruthy()
-    })
-  })
 })
