@@ -60,8 +60,8 @@ describe("Given I am connected as an employee", () => {
             userEvent.click(submitFormBtn)
             await new Promise(process.nextTick)
 
-            expect(spyUpdate).toHaveBeenCalled
-            expect(spyCreate).toHaveBeenCalled
+            expect(spyUpdate).toHaveBeenCalled()
+            expect(spyCreate).toHaveBeenCalled()
 
             const pageTitle = screen.getByText("Mes notes de frais")
             expect(pageTitle).toBeTruthy()
